@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "spectre.h": "c",
+        "syscall.h": "c"
+    }
+}

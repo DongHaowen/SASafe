@@ -1,4 +1,4 @@
-obj-m:=hello.o
+obj-m:=SystemCall.o
 CURRENT_PATH:=$(shell pwd)
 LINUX_KERNEL_PATH:=/usr/src/linux-headers-5.3.0-46-generic
 all:

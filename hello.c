@@ -8,12 +8,14 @@
  
 MODULE_LICENSE("Dual BSD/GPL");
  
-#define SYS_CALL_TABLE_ADDRESS 0xffffffffa04001a0  //sys_call_table对应的地址
+#define SYS_CALL_TABLE_ADDRESS 0xffffffff82000280  //sys_call_table对应的地址
 #define NUM 223  //系统调用号为223
+#define TEST 224
 int orig_cr0;  //用来存储cr0寄存器原来的值
 unsigned long *sys_call_table_my=0;
  
 static int(*anything_saved)(void);  //定义一个函数指针，用来保存一个系统调用
+static void(*test_saved)(int); // My Code
  
 static int clear_cr0(void) //使cr0寄存器的第17位设置为0（内核空间可写）
 {
@@ -37,6 +39,12 @@ asmlinkage long sys_mycall(void) //定义自己的系统调用
     printk("hello,world!\n");
     return current->pid;    
 }
+
+static void sys_testcall(int val)
+{
+    printk("test: %d\n", val);
+}
+
 static int __init call_init(void)
 {
     sys_call_table_my=(unsigned long*)(SYS_CALL_TABLE_ADDRESS);
@@ -45,6 +53,13 @@ static int __init call_init(void)
     orig_cr0=clear_cr0();//使内核地址空间可写
     sys_call_table_my[NUM]=(unsigned long) &sys_mycall;//用自己的系统调用替换NUM位置上的系统调用
     setback_cr0(orig_cr0);//使内核地址空间不可写
+
+
+    test_saved=(void(*)(int))(sys_call_table_my[TEST]);
+    orig_cr0=clear_cr0();
+    sys_call_table_my[TEST]=(unsigned long) &sys_testcall;
+    setback_cr0(orig_cr0);
+
     return 0;
 }
  
