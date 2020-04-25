@@ -24,7 +24,9 @@ unsigned int array1_size = 16;
 d_uchar unused1[64];
 d_uchar array1[160] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 d_uchar unused2[64];
-d_uchar array2[256 * 512];
+d_uchar array2[512 * 4096]; 
+d_uchar temp;
+// You need to Open Array2 First.
  
 static void(*syscall_saved_victim)(d_addr_t, d_addr_t);   //定义一个函数指针，用来保存一个系统调用
 static d_addr_t(*syscall_saved_help)(d_addr_t);
