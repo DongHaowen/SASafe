@@ -51,7 +51,6 @@ static void setback_cr0(int val)                    //使cr0寄存器设置为�
 static void sys_mycall_victim(d_addr_t secret_offset, d_addr_t prob_offset) //定义自己的系统调用
 {
     printk("Get %lx %lx\n",secret_offset,prob_offset);
-    volatile d_uchar temp;
     volatile int z;
     d_uchar *a2tmp = array2 + array1[secret_offset] * 4096 + prob_offset;
     asm volatile ("mfence\n" ::: "memory");
